@@ -1,0 +1,69 @@
+[gd_scene load_steps=12 format=3 uid="uid://c1q4ovwq6vuuf"]
+
+[ext_resource type="Texture2D" uid="uid://cqflt4aq1ed0q" path="res://assets/textures/kenney_prototype_textures/dark/texture_07.png" id="1_5o662"]
+[ext_resource type="Script" path="res://scripts/movement.gd" id="1_6jte7"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vitee"]
+sky_top_color = Color(0.42438, 0.495807, 0.595202, 1)
+sky_horizon_color = Color(0.661477, 0.706369, 0.775247, 1)
+ground_bottom_color = Color(0.22153, 0.329671, 0.505785, 1)
+ground_horizon_color = Color(0.661477, 0.706369, 0.775247, 1)
+
+[sub_resource type="Sky" id="Sky_cpq4m"]
+sky_material = SubResource("ProceduralSkyMaterial_vitee")
+
+[sub_resource type="Environment" id="Environment_x3oev"]
+background_mode = 2
+sky = SubResource("Sky_cpq4m")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dnhey"]
+size = Vector3(50, 0, 50)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vo6ex"]
+albedo_texture = ExtResource("1_5o662")
+uv1_scale = Vector3(0.3, 0.3, 0.3)
+uv1_triplanar = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_5hbel"]
+size = Vector2(50, 50)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_fa4ps"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_jllkw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qk5kf"]
+albedo_color = Color(1, 0, 0, 1)
+
+[node name="Stage1" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_x3oev")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Floor" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("BoxShape3D_dnhey")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+material_override = SubResource("StandardMaterial3D_vo6ex")
+mesh = SubResource("PlaneMesh_5hbel")
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.36336, 0)
+script = ExtResource("1_6jte7")
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+shape = SubResource("CapsuleShape3D_fa4ps")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
+mesh = SubResource("CapsuleMesh_jllkw")
+surface_material_override/0 = SubResource("StandardMaterial3D_qk5kf")
